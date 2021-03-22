@@ -5,5 +5,5 @@ A simple game where the player must continue to bounce the ball within the middl
 ![In Game Photo](/Pictures/circlepong2.PNG)
 
 Directions to play
--Download Circle Pong Playable Game.zip
--Run Circle Pong.exe
+* Download Circle Pong Playable Game.zip
+* Run Circle Pong.exe
