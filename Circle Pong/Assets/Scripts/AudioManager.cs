@@ -1,5 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿/* Handles all audio within game.
+ * PlaySound functions will be 
+ * called and play the correct sound
+ * abstractly to the caller.
+ */
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
@@ -11,18 +14,7 @@ public class AudioManager : MonoBehaviour
 
     public Counter counterScript;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    //Function for sound when ball hits paddle
     public void PlayHitSound()
     {
         if (counterScript.score < 25)

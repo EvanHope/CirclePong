@@ -1,19 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿/*
+ * Deals with pausing and restarting game.
+ * To pause press escape to restart press r.
+ */
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public BallBehavior BB;
     private bool paused = false;
-    public GameObject PausedMenu; 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public GameObject PausedMenu;
 
     void Update()
     {

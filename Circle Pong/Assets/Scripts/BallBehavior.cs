@@ -1,5 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿/*
+ * Deals with majority of games logic.
+ * In many cases when the ball interacts with other objects functions are called.
+ * 
+ */
+using System.Collections;
 using UnityEngine;
 
 public class BallBehavior : MonoBehaviour
@@ -36,15 +40,17 @@ public class BallBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Moves the ball based on calculated speed
         transform.position += new Vector3(speed.x, speed.y) * Time.deltaTime * speedMultiplier;
 
-        if(Input.GetKeyDown(KeyCode.UpArrow))
+        //Debug function
+        if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             HitAction();
         }
     }
 
-    //Used for power ups
+    //When ball collides with powerup coroutines are started to start the powerup effects
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.tag == "SlowTime")
@@ -56,7 +62,7 @@ public class BallBehavior : MonoBehaviour
             Destroy(col.gameObject);
         }
 
-        if(col.tag == "DoubleBarrier")
+        if (col.tag == "DoubleBarrier")
         {
             StopCoroutine(DoubleBarrier(powerUpTime, col.GetComponent<SpriteRenderer>().color));
             StopCoroutine(PowerUpColor(powerUpTime, col.GetComponent<SpriteRenderer>().color));
@@ -66,9 +72,10 @@ public class BallBehavior : MonoBehaviour
         }
 
     }
+    //TODO: Create gameover screen
     private void OnTriggerExit2D(Collider2D col)
     {
-        if(col.tag == "GameEnder")
+        if (col.tag == "GameEnder")
         {
             //End Game
         }
@@ -77,23 +84,25 @@ public class BallBehavior : MonoBehaviour
     //On Paddle Hit
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        //Ensures that the ball did not hit the paddle within the last second to work around bug where one hit would be counted twice.
         if (collisionTime + 1f < Time.time)
         {
             collisionTime = Time.time;
-            //TODO: Fix Bug where ball goes in weird direction due to normal being weird(prob just use preset directions for each different collider or something
+            //TODO: Fix Bug where ball goes in weird direction due to normal being weird(prob just use preset directions for each different collider
             speed = collision.GetContact(0).normal.normalized;
             //Debug.Log(collision.contacts[0].normal.normalized);
             HitAction();
         }
     }
 
+    //All behaviors for when ball hits paddle
     private void HitAction()
     {
         scoreCounter.AddScore(1);
         audioManager.PlayHitSound();
         float distancetemp = 100;
         int itemp = 0;
-        for(int i = 0; i < lights.Length; i++)
+        for (int i = 0; i < lights.Length; i++)
         {
             if (Vector3.Distance(transform.position, lights[i].transform.position) < distancetemp)
             {
@@ -108,9 +117,10 @@ public class BallBehavior : MonoBehaviour
 
 
     //PowerUps
+    //Slowtime powerup sets time scale to half
     public IEnumerator SlowTime(int powerUpLength)
     {
-        while(true)
+        while (true)
         {
             Time.timeScale = 0.5f;
             yield return new WaitForSecondsRealtime(powerUpLength);
@@ -119,12 +129,13 @@ public class BallBehavior : MonoBehaviour
         }
     }
 
+    //DoubleBarrier creates a second barrier on the circle
     public IEnumerator DoubleBarrier(int powerUpLength, Color pucolor)
     {
-        while(true)
+        while (true)
         {
             Quaternion rotation = Quaternion.Euler(0, 0, Random.Range(0, 360));
-            GameObject pu =Instantiate(paddlePrefab, Vector3.zero, rotation);
+            GameObject pu = Instantiate(paddlePrefab, Vector3.zero, rotation);
             pu.GetComponentInChildren<SpriteRenderer>().color = pucolor;
             yield return new WaitForSecondsRealtime(powerUpLength);
             Destroy(pu);
@@ -132,6 +143,7 @@ public class BallBehavior : MonoBehaviour
         }
     }
 
+    //Used to display the color of the powerup when one is picked up and slowly fade back to white
     private IEnumerator PowerUpColor(int powerUpLenght, Color pucolor)
     {
         paddleRenderer.color = pucolor;

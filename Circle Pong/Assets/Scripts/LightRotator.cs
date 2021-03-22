@@ -1,5 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿/*
+ * Rotates a parent object of all the lights in the center of the screen.
+ */
 using UnityEngine;
 
 public class LightRotator : MonoBehaviour
